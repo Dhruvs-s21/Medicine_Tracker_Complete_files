@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../utils/axios";
+import axios from "../utils/axios";   // using axios instance
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
@@ -16,19 +16,21 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      // ⭐ FIXED ROUTE HERE
+      // ⭐ Correct backend route (now automatically uses deployed URL)
       const res = await axios.post("/auth/login", {
         email,
         password,
       });
 
-      console.log("Login API response:", res.data);
-
+      // Store user + token
       loginUser(res.data.user, res.data.token);
 
       toast.success("Login successful!");
-      navigate("/");
+
+      // Redirect to dashboard or home
+      navigate("/dashboard");
     } catch (err) {
+      console.error(err);
       toast.error(err.response?.data?.msg || "Login failed");
     }
   };
@@ -51,6 +53,7 @@ export default function Login() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
 
@@ -63,6 +66,7 @@ export default function Login() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
 
               <span

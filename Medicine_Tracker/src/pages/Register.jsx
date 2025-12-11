@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../utils/axios.js";   // ✅ use your axios instance
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
@@ -8,7 +8,7 @@ export default function Register() {
   const navigate = useNavigate();
   const { loginUser } = useAuth();
 
-  // Read verifiedEmail and verifiedToken from URL
+  // Read verifiedEmail & verifiedToken from Google redirect
   const params = new URLSearchParams(window.location.search);
   const verifiedEmail = params.get("verifiedEmail");
   const verifiedToken = params.get("verifiedToken");
@@ -18,7 +18,7 @@ export default function Register() {
     email: verifiedEmail || "",
     phone: "",
     password: "",
-    verifiedToken: verifiedToken || ""
+    verifiedToken: verifiedToken || "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +28,7 @@ export default function Register() {
       setForm((prev) => ({
         ...prev,
         email: verifiedEmail || prev.email,
-        verifiedToken: verifiedToken || prev.verifiedToken
+        verifiedToken: verifiedToken || prev.verifiedToken,
       }));
     }
   }, [verifiedEmail, verifiedToken]);
@@ -36,7 +36,7 @@ export default function Register() {
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -44,7 +44,7 @@ export default function Register() {
     e.preventDefault();
 
     if (!form.verifiedToken) {
-      return toast.error("Please verify your email using Google before registering");
+      return toast.error("Please verify your email using Google before registering.");
     }
 
     if (!/^\d{10}$/.test(form.phone)) {
@@ -52,19 +52,17 @@ export default function Register() {
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        {
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          password: form.password,
-          verifiedToken: form.verifiedToken
-        }
-      );
+      const res = await axios.post("/auth/register", {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        password: form.password,
+        verifiedToken: form.verifiedToken,
+      });
 
       toast.success("Registration successful!");
-      // assume loginUser expects (user, token)
+
+      // Automatically login
       loginUser(res.data.user, res.data.token);
 
       navigate("/");
@@ -81,10 +79,10 @@ export default function Register() {
           Create Account
         </h2>
 
-        {/* Show Google verify button only if not yet verified */}
+        {/* Show Google verify button only if not verified */}
         {!verifiedEmail || !verifiedToken ? (
           <a
-            href="http://localhost:5000/api/auth/google-verify"
+            href="https://medtrack-backend-7mw8.onrender.com/api/auth/google-verify"
             className="w-full block bg-red-500 text-white py-2 rounded-lg text-center mb-5 font-medium"
           >
             Verify Email with Google
@@ -97,7 +95,7 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
 
-          {/* Name */}
+          {/* NAME */}
           <div>
             <label className="block mb-1 font-medium">Name</label>
             <input
@@ -111,7 +109,7 @@ export default function Register() {
             />
           </div>
 
-          {/* Email (locked after Google verify) */}
+          {/* EMAIL */}
           <div>
             <label className="block mb-1 font-medium">Email</label>
             <input
@@ -125,7 +123,7 @@ export default function Register() {
             />
           </div>
 
-          {/* Phone */}
+          {/* PHONE */}
           <div>
             <label className="block mb-1 font-medium">Phone</label>
             <input
@@ -143,7 +141,7 @@ export default function Register() {
             />
           </div>
 
-          {/* Password */}
+          {/* PASSWORD */}
           <div>
             <label className="block mb-1 font-medium">Password</label>
             <div className="relative">
@@ -166,7 +164,7 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Register Btn */}
+          {/* REGISTER BUTTON */}
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 rounded-lg text-lg hover:bg-indigo-700 transition"

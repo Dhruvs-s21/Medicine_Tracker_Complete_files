@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../utils/axios";   // axios instance with baseURL + token
+import axios from "../utils/axios";   // axios instance
 import toast from "react-hot-toast";
 
 export default function AddMedicine() {
@@ -20,6 +20,13 @@ export default function AddMedicine() {
     e.preventDefault();
     setLoading(true);
 
+    // Prevent negative values
+    if (form.quantity <= 0) {
+      toast.error("Quantity must be greater than 0");
+      setLoading(false);
+      return;
+    }
+
     try {
       const fd = new FormData();
       fd.append("name", form.name);
@@ -29,11 +36,8 @@ export default function AddMedicine() {
 
       if (image) fd.append("image", image);
 
-      // axios instance auto-adds Authorization token
       const res = await axios.post("/medicines/add", fd, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       toast.success("Medicine added successfully!");
@@ -52,7 +56,7 @@ export default function AddMedicine() {
       <h2 className="text-2xl font-bold mb-4 text-indigo-600">Add Medicine</h2>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        
+
         <div>
           <label className="font-medium">Name</label>
           <input
@@ -80,6 +84,7 @@ export default function AddMedicine() {
           <input
             className="border w-full px-3 py-2 rounded-md"
             type="number"
+            min="1"
             value={form.quantity}
             onChange={(e) => setForm({ ...form, quantity: e.target.value })}
             required

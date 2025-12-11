@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "../utils/axios";
+import axios from "../utils/axios"; // using axios instance
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
@@ -33,6 +33,7 @@ const Profile = () => {
       setUser(res.data);
       setLocalUser(res.data);
 
+      // Only set email if coming normally (not from verified email)
       if (!verifiedEmail) {
         setEmailInput(res.data.email);
       }
@@ -57,7 +58,7 @@ const Profile = () => {
   // Update NAME + PHONE
   // ===============================
   const updateBasic = async () => {
-    if (!localUser.phone.match(/^[0-9]{10}$/))
+    if (!/^[0-9]{10}$/.test(localUser.phone))
       return toast.error("Phone number must be exactly 10 digits");
 
     if (!localUser.name.trim())
@@ -92,13 +93,15 @@ const Profile = () => {
         verifiedToken: gToken,
       });
 
+      // Replace user globally
       setUser(res.data.user);
       setLocalUser(res.data.user);
       setEmailInput(res.data.user.email);
 
-      setGToken("");
+      setGToken(""); // clear token
       toast.success("Email updated successfully");
 
+      // Remove query params from URL
       window.history.replaceState({}, "", "/profile");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Email update failed");
@@ -132,14 +135,17 @@ const Profile = () => {
   return (
     <div className="max-w-2xl mx-auto mt-10 space-y-10">
 
-      {/* BASIC INFO */}
+      {/* ===============================
+          BASIC INFO
+      =============================== */}
       <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-100">
         <h3 className="text-xl font-semibold mb-6 text-gray-900">
           Basic Information
         </h3>
 
         <div className="space-y-4">
-          {/* Name */}
+
+          {/* NAME */}
           <div>
             <label className="text-gray-700 font-medium">Name</label>
             <input
@@ -150,7 +156,7 @@ const Profile = () => {
             />
           </div>
 
-          {/* Phone */}
+          {/* PHONE */}
           <div>
             <label className="text-gray-700 font-medium">Phone</label>
             <input
@@ -175,7 +181,9 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* CHANGE EMAIL */}
+      {/* ===============================
+          CHANGE EMAIL
+      =============================== */}
       <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-100">
         <h3 className="text-xl font-semibold mb-6 text-gray-900">
           Change Email
@@ -186,13 +194,14 @@ const Profile = () => {
           {/* Google Verify Button */}
           {!verifiedEmail && !gToken && (
             <a
-              href="https://medtrack-backend-7mw8.onrender.com/api/auth/google-verify" // ✅ FIXED
+              href="https://medtrack-backend-7mw8.onrender.com/api/auth/google-verify-email-update"
               className="block bg-red-500 text-white text-center py-3 rounded-xl font-medium hover:bg-red-600"
             >
               Verify New Email With Google
             </a>
           )}
 
+          {/* Verification Success */}
           {verifiedEmail && (
             <div className="text-green-700 bg-green-100 border border-green-300 p-3 rounded text-center">
               Email Verified: {verifiedEmail}
@@ -220,7 +229,9 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* RESET PASSWORD */}
+      {/* ===============================
+          RESET PASSWORD
+      =============================== */}
       <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-100">
         <h3 className="text-xl font-semibold mb-6 text-gray-900">
           Reset Password
@@ -228,7 +239,7 @@ const Profile = () => {
 
         <div className="space-y-4">
 
-          {/* Old Password */}
+          {/* OLD PASSWORD */}
           <div>
             <label className="text-gray-700 font-medium">Old Password</label>
             <div className="relative">
@@ -247,7 +258,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* New Password */}
+          {/* NEW PASSWORD */}
           <div>
             <label className="text-gray-700 font-medium">New Password</label>
             <div className="relative">
@@ -266,6 +277,7 @@ const Profile = () => {
             </div>
           </div>
 
+          {/* BUTTON */}
           <button
             onClick={updatePassword}
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-medium text-lg"

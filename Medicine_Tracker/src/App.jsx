@@ -9,8 +9,7 @@ import Discover from "./pages/Discover";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";     // ⭐ added
-import ResetPassword from "./pages/ResetPassword";       // ⭐ added
+import ForgotPassword from "./pages/ForgotPassword";    
 
 import Profile from "./pages/Profile";
 
@@ -24,17 +23,17 @@ export default function App() {
   }
 
   return (
-    <>
+    <BrowserRouter>
       <Toaster position="top-right" />
 
       <Routes>
+
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* ⭐ Added Forgot Password Routes */}
+        {/* Forgot Password Flow */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected Routes */}
         <Route
@@ -47,7 +46,8 @@ export default function App() {
           <Route path="discover" element={<Discover />} />
           <Route path="profile" element={<Profile />} />
         </Route>
+
       </Routes>
-    </>
+    </BrowserRouter>
   );
 }

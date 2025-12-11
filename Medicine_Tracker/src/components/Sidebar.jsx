@@ -1,13 +1,23 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { 
   HomeIcon, 
   PlusCircleIcon, 
   ClipboardDocumentListIcon,
   MagnifyingGlassIcon,
-  UserCircleIcon
+  UserCircleIcon,
+  ArrowRightOnRectangleIcon
 } from "@heroicons/react/24/outline";
+import { useAuth } from "../context/AuthContext";
 
 export default function Sidebar() {
+  const { logoutUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUser();     // clears localStorage + context
+    navigate("/login");
+  };
+
   return (
     <div className="w-64 bg-white shadow-lg p-6 min-h-screen">
       <h2 className="text-2xl font-bold mb-8 text-indigo-600">
@@ -61,7 +71,6 @@ export default function Sidebar() {
           Discover
         </NavLink>
 
-        {/* ---------- PROFILE PAGE LINK ---------- */}
         <NavLink 
           to="/profile"
           className={({ isActive }) =>
@@ -72,7 +81,15 @@ export default function Sidebar() {
           <UserCircleIcon className="w-5 h-5" />
           Profile
         </NavLink>
-        {/* --------------------------------------- */}
+
+        {/* LOGOUT BUTTON */}
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 p-3 rounded-md text-gray-700 hover:bg-red-100 hover:text-red-600 transition mt-4"
+        >
+          <ArrowRightOnRectangleIcon className="w-5 h-5" />
+          Logout
+        </button>
 
       </nav>
     </div>

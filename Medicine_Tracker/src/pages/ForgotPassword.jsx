@@ -40,14 +40,16 @@ export default function ForgotPassword() {
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-4">
       <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md text-center">
 
+        {/* STEP 1: Verify Email With Google */}
         {!verifiedEmail ? (
           <>
             <h2 className="text-xl font-bold mb-4">Verify Email</h2>
+
             <button
               className="w-full bg-indigo-600 text-white py-2 rounded"
               onClick={() =>
                 window.location.href =
-                  "http://localhost:5000/api/auth/google-password-reset"
+                  "https://medtrack-backend-7mw8.onrender.com/api/auth/google-password-reset"
               }
             >
               Verify with Google
@@ -55,6 +57,7 @@ export default function ForgotPassword() {
           </>
         ) : (
           <>
+            {/* STEP 2: Enter New Password */}
             <h2 className="text-2xl font-bold mb-4">Set New Password</h2>
             <p className="text-gray-600 mb-4">Verified: {verifiedEmail}</p>
 
