@@ -12,7 +12,7 @@ connectDB();
 require("./cron/expiryChecker");
 
 const app = express();
-
+console.log("MONGO_URI FROM ENV =>", process.env.MONGO_URI); 
 // =========================
 // MIDDLEWARES
 // =========================
