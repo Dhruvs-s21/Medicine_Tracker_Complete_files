@@ -9,7 +9,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/api/auth/google-verify/callback",
+      callbackURL: "https://medtrack-backend-7mw8.onrender.com/api/auth/google-verify/callback",
     },
     async (_, __, profile, done) => {
       return done(null, { email: profile.emails[0].value });
@@ -24,7 +24,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/api/auth/google-verify-email-update/callback",
+      callbackURL: "https://medtrack-backend-7mw8.onrender.com/api/auth/google-verify-email-update/callback",
     },
     async (_, __, profile, done) => {
       return done(null, { email: profile.emails[0].value });
@@ -39,7 +39,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/api/auth/google-password-reset/callback",
+      callbackURL: "https://medtrack-backend-7mw8.onrender.com/api/auth/google-password-reset/callback",
     },
     async (_, __, profile, done) => {
       return done(null, { email: profile.emails[0].value });
