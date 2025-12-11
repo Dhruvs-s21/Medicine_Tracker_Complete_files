@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://medtrack-backend-7mw8.onrender.com",
 });
 
 // Attach token on every request
