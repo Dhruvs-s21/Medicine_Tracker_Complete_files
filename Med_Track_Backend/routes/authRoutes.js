@@ -2,7 +2,7 @@ const router = require("express").Router();
 const passport = require("../config/googleAuth");
 const jwt = require("jsonwebtoken");
 
-// ⭐ IMPORTANT — you FORGOT THIS earlier
+// Middleware
 const authMiddleware = require("../middleware/authMiddleware");
 
 const {
@@ -15,6 +15,9 @@ const {
   verifiedResetRequest,
   resetPasswordFinalDirect,
 } = require("../controllers/authController");
+
+// 🌐 FRONTEND DOMAIN (IMPORTANT)
+const FRONTEND_URL = "https://medicine-tracker-complete-files.vercel.app";
 
 
 // ====================================================
@@ -37,8 +40,9 @@ router.get(
       { expiresIn: "10m" }
     );
 
+    // ✅ FIXED REDIRECT — NOW GOES TO VERCEL FRONTEND
     res.redirect(
-      `http://localhost:5173/register?verifiedEmail=${encodeURIComponent(
+      `${FRONTEND_URL}/register?verifiedEmail=${encodeURIComponent(
         verifiedEmail
       )}&verifiedToken=${verifiedToken}`
     );
@@ -66,8 +70,9 @@ router.get(
       { expiresIn: "10m" }
     );
 
+    // ✅ FIXED REDIRECT — NOW GOES TO VERCEL FRONTEND
     res.redirect(
-      `http://localhost:5173/forgot-password?verifiedEmail=${encodeURIComponent(
+      `${FRONTEND_URL}/forgot-password?verifiedEmail=${encodeURIComponent(
         verifiedEmail
       )}&verifiedToken=${verifiedToken}`
     );
@@ -81,8 +86,7 @@ router.get(
 router.post("/register", register);
 router.post("/login", login);
 
-
-// ⭐ PROTECTED ROUTES — REQUIRE TOKEN
+// 🔐 PROTECTED ROUTES
 router.get("/profile", authMiddleware, getProfile);
 router.put("/profile", authMiddleware, updateProfile);
 router.put("/profile/email", authMiddleware, updateEmail);
@@ -90,14 +94,9 @@ router.put("/profile/password", authMiddleware, updatePassword);
 
 
 // ====================================================
-// PASSWORD RESET (GOOGLE VERIFIED)
+// PASSWORD RESET
 // ====================================================
-
-// Step 1 — (Optional, not used by you)
 router.post("/verified-reset-request", verifiedResetRequest);
-
-// Step 2 — FINAL DIRECT PASSWORD RESET
 router.post("/reset-password-final-direct", resetPasswordFinalDirect);
-
 
 module.exports = router;
