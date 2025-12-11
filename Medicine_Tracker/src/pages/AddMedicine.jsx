@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../utils/axios";   // ✅ use axios instance
-import toast from "react-hot-toast";  // ✅ use toast
+import axios from "../utils/axios";   // axios instance with baseURL + token
+import toast from "react-hot-toast";
 
 export default function AddMedicine() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export default function AddMedicine() {
 
       if (image) fd.append("image", image);
 
-      // axios instance auto adds token
+      // axios instance auto-adds Authorization token
       const res = await axios.post("/medicines/add", fd, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -37,8 +37,8 @@ export default function AddMedicine() {
       });
 
       toast.success("Medicine added successfully!");
-
       navigate("/medicines");
+
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.msg || "Error adding medicine");
@@ -52,7 +52,7 @@ export default function AddMedicine() {
       <h2 className="text-2xl font-bold mb-4 text-indigo-600">Add Medicine</h2>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-
+        
         <div>
           <label className="font-medium">Name</label>
           <input
@@ -113,6 +113,7 @@ export default function AddMedicine() {
         >
           {loading ? "Adding..." : "Add Medicine"}
         </button>
+
       </form>
     </div>
   );

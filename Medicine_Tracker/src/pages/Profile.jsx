@@ -28,13 +28,11 @@ const Profile = () => {
   // ===============================
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("/api/auth/profile");
+      const res = await axios.get("/auth/profile");
 
       setUser(res.data);
       setLocalUser(res.data);
 
-      // ⚠️ IMPORTANT FIX:
-      // Do NOT overwrite emailInput if user came from Google verification
       if (!verifiedEmail) {
         setEmailInput(res.data.email);
       }
@@ -54,7 +52,6 @@ const Profile = () => {
     if (verifiedEmail) setEmailInput(verifiedEmail);
     if (verifiedToken) setGToken(verifiedToken);
   }, [verifiedEmail, verifiedToken]);
-
 
   // ===============================
   // Update NAME + PHONE
@@ -95,21 +92,18 @@ const Profile = () => {
         verifiedToken: gToken,
       });
 
-      // Update user globally
       setUser(res.data.user);
       setLocalUser(res.data.user);
       setEmailInput(res.data.user.email);
 
-      setGToken(""); // clear token
+      setGToken("");
       toast.success("Email updated successfully");
 
-      // Remove query params after success
       window.history.replaceState({}, "", "/profile");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Email update failed");
     }
   };
-
 
   // ===============================
   // UPDATE PASSWORD
@@ -138,11 +132,11 @@ const Profile = () => {
   return (
     <div className="max-w-2xl mx-auto mt-10 space-y-10">
 
-      {/* ===============================
-          BASIC INFO
-      =============================== */}
+      {/* BASIC INFO */}
       <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-100">
-        <h3 className="text-xl font-semibold mb-6 text-gray-900">Basic Information</h3>
+        <h3 className="text-xl font-semibold mb-6 text-gray-900">
+          Basic Information
+        </h3>
 
         <div className="space-y-4">
           {/* Name */}
@@ -152,7 +146,7 @@ const Profile = () => {
               type="text"
               value={localUser.name || ""}
               onChange={(e) => setLocalUser({ ...localUser, name: e.target.value })}
-              className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="w-full mt-1 p-3 rounded-lg border border-gray-300"
             />
           </div>
 
@@ -168,7 +162,7 @@ const Profile = () => {
                   setLocalUser({ ...localUser, phone: e.target.value });
                 }
               }}
-              className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="w-full mt-1 p-3 rounded-lg border border-gray-300"
             />
           </div>
 
@@ -181,26 +175,24 @@ const Profile = () => {
         </div>
       </div>
 
-
-      {/* ===============================
-          EMAIL UPDATE
-      =============================== */}
+      {/* CHANGE EMAIL */}
       <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-100">
-        <h3 className="text-xl font-semibold mb-6 text-gray-900">Change Email</h3>
+        <h3 className="text-xl font-semibold mb-6 text-gray-900">
+          Change Email
+        </h3>
 
         <div className="space-y-4">
 
           {/* Google Verify Button */}
           {!verifiedEmail && !gToken && (
             <a
-              href="http://localhost:5000/api/auth/google-verify-email-update"
+              href="https://medtrack-backend-7mw8.onrender.com/api/auth/google-verify" // ✅ FIXED
               className="block bg-red-500 text-white text-center py-3 rounded-xl font-medium hover:bg-red-600"
             >
               Verify New Email With Google
             </a>
           )}
 
-          {/* Success Message */}
           {verifiedEmail && (
             <div className="text-green-700 bg-green-100 border border-green-300 p-3 rounded text-center">
               Email Verified: {verifiedEmail}
@@ -213,9 +205,9 @@ const Profile = () => {
             <input
               type="text"
               value={emailInput}
-              disabled={!!gToken} // prevent editing after verification
+              disabled={!!gToken}
               onChange={(e) => setEmailInput(e.target.value)}
-              className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="w-full mt-1 p-3 rounded-lg border border-gray-300"
             />
           </div>
 
@@ -228,12 +220,11 @@ const Profile = () => {
         </div>
       </div>
 
-
-      {/* ===============================
-          PASSWORD RESET
-      =============================== */}
+      {/* RESET PASSWORD */}
       <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-100">
-        <h3 className="text-xl font-semibold mb-6 text-gray-900">Reset Password</h3>
+        <h3 className="text-xl font-semibold mb-6 text-gray-900">
+          Reset Password
+        </h3>
 
         <div className="space-y-4">
 

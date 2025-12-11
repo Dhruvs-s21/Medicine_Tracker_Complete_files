@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../utils/axios";   // ✅ use axios instance
 
 export default function Discover() {
   const [donations, setDonations] = useState([]);
@@ -14,7 +14,7 @@ export default function Discover() {
 
   const loadMedicines = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/medicines/discover");
+      const res = await axios.get("/medicines/discover");  // ✅ FIXED
       setDonations(res.data);
     } catch (err) {
       console.error(err);
@@ -55,13 +55,15 @@ export default function Discover() {
             className="p-5 bg-white shadow-md rounded-xl border border-gray-200 flex gap-6"
           >
             {/* IMAGE */}
-            <div className="w-48 h-48 border rounded-lg flex items-center justify-center bg-gray-100 overflow-hidden cursor-pointer">
+            <div
+              className="w-48 h-48 border rounded-lg flex items-center justify-center bg-gray-100 overflow-hidden cursor-pointer"
+              onClick={() => m.image && setEnlargeImage(m.image)}
+            >
               {m.image ? (
                 <img
                   src={m.image}
                   alt={m.name}
                   className="w-full h-full object-cover"
-                  onClick={() => setEnlargeImage(m.image)}
                 />
               ) : (
                 <span className="text-gray-500">No Image Attached</span>
@@ -97,6 +99,7 @@ export default function Discover() {
                 <a
                   href={`https://wa.me/${m.donor?.phone}`}
                   target="_blank"
+                  rel="noreferrer"
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg"
                 >
                   WhatsApp

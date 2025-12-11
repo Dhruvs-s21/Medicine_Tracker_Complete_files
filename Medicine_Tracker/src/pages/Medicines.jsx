@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../utils/axios";   // ✅ use your axios instance
 import { Link } from "react-router-dom";
 
 export default function Medicines() {
@@ -22,10 +22,7 @@ export default function Medicines() {
   // Fetch medicines
   const loadMedicines = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/medicines/mine", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.get("/medicines/mine");  // ✅ FIXED
       setMedicines(res.data);
     } catch {
       alert("Failed to fetch medicines");
@@ -38,11 +35,7 @@ export default function Medicines() {
 
   const deleteMedicine = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(
-        `http://localhost:5000/api/medicines/delete/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.delete(`/medicines/delete/${id}`);  // ✅ FIXED
       loadMedicines();
     } catch {
       alert("Error deleting medicine");
@@ -60,18 +53,12 @@ export default function Medicines() {
 
   const saveEdit = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-
       const fd = new FormData();
       fd.append("name", editForm.name);
       fd.append("expiryDate", editForm.expiryDate);
       fd.append("quantity", editForm.quantity);
 
-      await axios.put(
-        `http://localhost:5000/api/medicines/update/${id}`,
-        fd,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.put(`/medicines/update/${id}`, fd);  // ✅ FIXED
 
       setEditingId(null);
       loadMedicines();
@@ -84,12 +71,7 @@ export default function Medicines() {
 
   const makeAvailable = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/api/medicines/available/${id}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.put(`/medicines/available/${id}`);  // ✅ FIXED
       loadMedicines();
     } catch {
       alert("Failed to change status");
@@ -98,12 +80,7 @@ export default function Medicines() {
 
   const markAsDonated = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/api/medicines/donated/${id}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.put(`/medicines/donated/${id}`);  // ✅ FIXED
       loadMedicines();
     } catch {
       alert("Failed to mark donated");
@@ -148,8 +125,8 @@ export default function Medicines() {
 
               return (
                 <tr key={m._id} className="border-b">
-                
-                  {/* ----------------- EDIT MODE ----------------- */}
+                  
+                  {/* EDIT MODE */}
                   {editingId === m._id ? (
                     <>
                       <td className="py-2">
@@ -157,10 +134,7 @@ export default function Medicines() {
                           type="text"
                           value={editForm.name}
                           onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              name: e.target.value
-                            })
+                            setEditForm({ ...editForm, name: e.target.value })
                           }
                           className="border px-2 py-1 rounded w-full"
                           disabled={isExpired}
@@ -241,12 +215,10 @@ export default function Medicines() {
                       </td>
                     </>
                   ) : (
-                    /* ----------------- NORMAL VIEW ----------------- */
                     <>
+                      {/* NORMAL MODE */}
                       <td className="py-2">{m.name}</td>
-
                       <td>{formatDate(m.expiryDate)}</td>
-
                       <td>{m.quantity}</td>
 
                       <td className="py-2">
@@ -272,7 +244,6 @@ export default function Medicines() {
                       <td className="py-2">
                         <div className="grid grid-cols-2 gap-2 w-full">
                           
-                          {/* ❌ HIDE ALL ACTIONS IF EXPIRED */}
                           {isExpired ? (
                             <button
                               className="border px-2 py-1 text-red-600 rounded col-span-2"

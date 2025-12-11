@@ -17,7 +17,7 @@ export default function Login() {
 
     try {
       // ⭐ FIXED ROUTE HERE
-      const res = await axios.post("/api/auth/login", {
+      const res = await axios.post("/auth/login", {
         email,
         password,
       });
