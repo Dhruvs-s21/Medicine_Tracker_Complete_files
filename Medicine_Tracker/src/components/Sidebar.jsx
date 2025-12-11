@@ -27,7 +27,7 @@ export default function Sidebar() {
       <nav className="flex flex-col gap-3">
 
         <NavLink 
-          to="/" 
+          to="/dashboard"
           end
           className={({ isActive }) =>
             `sidebar-link flex items-center gap-3 p-3 rounded-md transition 

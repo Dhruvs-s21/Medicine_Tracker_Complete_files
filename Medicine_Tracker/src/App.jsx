@@ -24,24 +24,30 @@ export default function App() {
       <Toaster position="top-right" />
 
       <Routes>
-        {/* Public Routes */}
+        {/* PUBLIC PAGES */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Protected Routes */}
+        {/* PROTECTED APP ROUTES */}
         <Route
           path="/"
           element={user ? <AppLayout /> : <Navigate to="/login" replace />}
         >
           <Route index element={<Dashboard />} />
+
+          {/* 🔥 Add dashboard route to avoid warnings */}
+          <Route path="dashboard" element={<Dashboard />} />
+
           <Route path="medicines" element={<Medicines />} />
           <Route path="add-medicine" element={<AddMedicine />} />
           <Route path="discover" element={<Discover />} />
           <Route path="profile" element={<Profile />} />
         </Route>
+
+        {/* NOT FOUND HANDLER */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
   );
