@@ -82,14 +82,7 @@ export default function Sidebar() {
           Profile
         </NavLink>
 
-        {/* LOGOUT BUTTON */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 p-3 rounded-md text-gray-700 hover:bg-red-100 hover:text-red-600 transition mt-4"
-        >
-          <ArrowRightOnRectangleIcon className="w-5 h-5" />
-          Logout
-        </button>
+       
 
       </nav>
     </div>

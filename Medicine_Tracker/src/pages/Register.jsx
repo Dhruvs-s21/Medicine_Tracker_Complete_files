@@ -86,6 +86,7 @@ export default function Register() {
             className="w-full block bg-red-500 text-white py-2 rounded-lg text-center mb-5 font-medium"
           >
             Verify Email with Google
+                 click here
           </a>
         ) : (
           <div className="text-sm text-green-700 bg-green-100 px-3 py-2 rounded mb-4 text-center">
@@ -118,7 +119,7 @@ export default function Register() {
               className="w-full border rounded-lg px-4 py-2 bg-gray-100"
               value={form.email}
               disabled={!!form.verifiedToken}
-              placeholder="Verify using Google"
+              placeholder="Verify email from above"
               required
             />
           </div>
