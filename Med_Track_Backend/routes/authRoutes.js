@@ -17,7 +17,7 @@ const {
 } = require("../controllers/authController");
 
 // 🌐 CORRECT FRONTEND URL
-const FRONTEND_URL = "https://medicine-tracker-complete-files-it1ip607r.vercel.app";
+const FRONTEND_URL = "https://medicine-tracker-complete-files.vercel.app";
 
 
 // ====================================================
