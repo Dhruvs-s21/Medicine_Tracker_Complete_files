@@ -16,8 +16,8 @@ const {
   resetPasswordFinalDirect,
 } = require("../controllers/authController");
 
-// 🌐 FRONTEND DOMAIN (IMPORTANT)
-const FRONTEND_URL = "https://medicine-tracker-complete-files.vercel.app";
+// 🌐 CORRECT FRONTEND URL
+const FRONTEND_URL = "https://medicine-tracker-complete-files-it1ip607r.vercel.app";
 
 
 // ====================================================
@@ -40,7 +40,6 @@ router.get(
       { expiresIn: "10m" }
     );
 
-    // ✅ FIXED REDIRECT — NOW GOES TO VERCEL FRONTEND
     res.redirect(
       `${FRONTEND_URL}/register?verifiedEmail=${encodeURIComponent(
         verifiedEmail
@@ -70,7 +69,6 @@ router.get(
       { expiresIn: "10m" }
     );
 
-    // ✅ FIXED REDIRECT — NOW GOES TO VERCEL FRONTEND
     res.redirect(
       `${FRONTEND_URL}/forgot-password?verifiedEmail=${encodeURIComponent(
         verifiedEmail
@@ -86,7 +84,7 @@ router.get(
 router.post("/register", register);
 router.post("/login", login);
 
-// 🔐 PROTECTED ROUTES
+// Protected Routes
 router.get("/profile", authMiddleware, getProfile);
 router.put("/profile", authMiddleware, updateProfile);
 router.put("/profile/email", authMiddleware, updateEmail);
