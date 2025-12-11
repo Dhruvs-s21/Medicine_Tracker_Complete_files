@@ -16,9 +16,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/auth/login", {
+      // ⭐ FIXED ROUTE HERE
+      const res = await axios.post("/api/auth/login", {
         email,
-        password
+        password,
       });
 
       console.log("Login API response:", res.data);
@@ -72,7 +73,6 @@ export default function Login() {
               </span>
             </div>
 
-            {/* ⭐ Added Forgot Password Link */}
             <p
               className="text-right text-indigo-600 text-sm mt-1 cursor-pointer hover:underline"
               onClick={() => navigate("/forgot-password")}
