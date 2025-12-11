@@ -28,7 +28,7 @@ const Profile = () => {
   // ===============================
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("/auth/profile");
+      const res = await axios.get("/api/auth/profile");
 
       setUser(res.data);
       setLocalUser(res.data);
