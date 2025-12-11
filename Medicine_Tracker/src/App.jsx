@@ -1,16 +1,15 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";   
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import AppLayout from "./layout/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import Medicines from "./pages/Medicines";
 import AddMedicine from "./pages/AddMedicine";
 import Discover from "./pages/Discover";
-
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";    
-
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 
 import { useAuth } from "./context/AuthContext";
@@ -18,22 +17,19 @@ import { useAuth } from "./context/AuthContext";
 export default function App() {
   const { user, authLoading } = useAuth();
 
-  if (authLoading) {
-    return <p className="text-center mt-10 text-lg">Loading...</p>;
-  }
+  if (authLoading) return <p>Loading...</p>;
 
   return (
-    <BrowserRouter>
+    <>
       <Toaster position="top-right" />
 
       <Routes>
-
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Forgot Password Flow */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected Routes */}
         <Route
@@ -46,8 +42,7 @@ export default function App() {
           <Route path="discover" element={<Discover />} />
           <Route path="profile" element={<Profile />} />
         </Route>
-
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
