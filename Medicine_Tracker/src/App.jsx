@@ -9,6 +9,8 @@ import Discover from "./pages/Discover";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";     // ⭐ added
+import ResetPassword from "./pages/ResetPassword";       // ⭐ added
 
 import Profile from "./pages/Profile";
 
@@ -18,7 +20,7 @@ export default function App() {
   const { user, authLoading } = useAuth();
 
   if (authLoading) {
-    return <p className="text-center mt-10 text-lg">Loading...</p>;   // prevent auto-logout on reload
+    return <p className="text-center mt-10 text-lg">Loading...</p>;
   }
 
   return (
@@ -26,9 +28,15 @@ export default function App() {
       <Toaster position="top-right" />
 
       <Routes>
+        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
+        {/* ⭐ Added Forgot Password Routes */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+        {/* Protected Routes */}
         <Route
           path="/"
           element={user ? <AppLayout /> : <Navigate to="/login" replace />}
@@ -43,4 +51,3 @@ export default function App() {
     </>
   );
 }
-

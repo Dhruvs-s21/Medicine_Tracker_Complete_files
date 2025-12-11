@@ -2,46 +2,47 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 require("dotenv").config();
 
-// We create TWO separate static strategies because Google does NOT allow dynamic callbacks
-// This ensures both REGISTER and EMAIL-UPDATE verification work properly.
-
-//
-// ============================================================
-// STRATEGY 1 — GOOGLE VERIFY FOR REGISTER
-// ============================================================
-//
+// ⭐ STRATEGY 1 — REGISTER
 passport.use(
   "google-register",
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/api/auth/google-verify/callback"
+      callbackURL: "http://localhost:5000/api/auth/google-verify/callback",
     },
-    async (accessToken, refreshToken, profile, done) => {
-      const email = profile.emails[0].value;
-      return done(null, { email });
+    async (_, __, profile, done) => {
+      return done(null, { email: profile.emails[0].value });
     }
   )
 );
 
-//
-// ============================================================
-// STRATEGY 2 — GOOGLE VERIFY FOR EMAIL UPDATE
-// ============================================================
-//
+// ⭐ STRATEGY 2 — EMAIL UPDATE
 passport.use(
   "google-email-update",
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        "http://localhost:5000/api/auth/google-verify-email-update/callback"
+      callbackURL: "http://localhost:5000/api/auth/google-verify-email-update/callback",
     },
-    async (accessToken, refreshToken, profile, done) => {
-      const email = profile.emails[0].value;
-      return done(null, { email });
+    async (_, __, profile, done) => {
+      return done(null, { email: profile.emails[0].value });
+    }
+  )
+);
+
+// ⭐ STRATEGY 3 — PASSWORD RESET
+passport.use(
+  "google-password-reset",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:5000/api/auth/google-password-reset/callback",
+    },
+    async (_, __, profile, done) => {
+      return done(null, { email: profile.emails[0].value });
     }
   )
 );

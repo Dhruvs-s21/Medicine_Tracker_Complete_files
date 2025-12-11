@@ -1,12 +1,12 @@
 import { useState } from "react";
-import axios from "../utils/axios";  // use axios instance
+import axios from "../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast"; //  better toast
+import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { loginUser } = useAuth();   // correct function from AuthContext
+  const { loginUser } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +23,6 @@ export default function Login() {
 
       console.log("Login API response:", res.data);
 
-      // Save user & token in global auth state
       loginUser(res.data.user, res.data.token);
 
       toast.success("Login successful!");
@@ -72,6 +71,14 @@ export default function Login() {
                 {showPass ? "🙈" : "👁️"}
               </span>
             </div>
+
+            {/* ⭐ Added Forgot Password Link */}
+            <p
+              className="text-right text-indigo-600 text-sm mt-1 cursor-pointer hover:underline"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Forgot Password?
+            </p>
           </div>
 
           <button

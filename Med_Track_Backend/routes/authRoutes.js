@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const passport = require("../config/googleAuth");
 const jwt = require("jsonwebtoken");
+
+// ⭐ IMPORTANT — you FORGOT THIS earlier
 const authMiddleware = require("../middleware/authMiddleware");
 
 const {
@@ -10,11 +12,13 @@ const {
   updateProfile,
   updateEmail,
   updatePassword,
+  verifiedResetRequest,
+  resetPasswordFinalDirect,
 } = require("../controllers/authController");
 
 
 // ====================================================
-// REGISTER — GOOGLE EMAIL VERIFY
+// GOOGLE VERIFY — REGISTER
 // ====================================================
 router.get(
   "/google-verify",
@@ -43,16 +47,16 @@ router.get(
 
 
 // ====================================================
-// EMAIL UPDATE — GOOGLE VERIFY
+// GOOGLE VERIFY — PASSWORD RESET
 // ====================================================
 router.get(
-  "/google-verify-email-update",
-  passport.authenticate("google-email-update", { scope: ["email"] })
+  "/google-password-reset",
+  passport.authenticate("google-password-reset", { scope: ["email"] })
 );
 
 router.get(
-  "/google-verify-email-update/callback",
-  passport.authenticate("google-email-update", { session: false }),
+  "/google-password-reset/callback",
+  passport.authenticate("google-password-reset", { session: false }),
   (req, res) => {
     const verifiedEmail = req.user.email;
 
@@ -63,7 +67,7 @@ router.get(
     );
 
     res.redirect(
-      `http://localhost:5173/profile?verifiedEmail=${encodeURIComponent(
+      `http://localhost:5173/forgot-password?verifiedEmail=${encodeURIComponent(
         verifiedEmail
       )}&verifiedToken=${verifiedToken}`
     );
@@ -77,9 +81,23 @@ router.get(
 router.post("/register", register);
 router.post("/login", login);
 
+
+// ⭐ PROTECTED ROUTES — REQUIRE TOKEN
 router.get("/profile", authMiddleware, getProfile);
 router.put("/profile", authMiddleware, updateProfile);
 router.put("/profile/email", authMiddleware, updateEmail);
 router.put("/profile/password", authMiddleware, updatePassword);
+
+
+// ====================================================
+// PASSWORD RESET (GOOGLE VERIFIED)
+// ====================================================
+
+// Step 1 — (Optional, not used by you)
+router.post("/verified-reset-request", verifiedResetRequest);
+
+// Step 2 — FINAL DIRECT PASSWORD RESET
+router.post("/reset-password-final-direct", resetPasswordFinalDirect);
+
 
 module.exports = router;
